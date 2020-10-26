@@ -7,7 +7,6 @@
 #include "InterruptRoutines.h"
 
 #define PHOTO_CHANNEL 0 //only info about one channel of the mux is needed as there are only 2 channels
-#define PHOTO_THRESH 0.25 //threshold under which led is disabled (set to 25%)
 
 extern uint8 flag_uart; //flag signaling UART instructions for enabling the sampling,
 extern uint8 flag_photo; //flag signaling if light is under the threshold
@@ -25,9 +24,15 @@ CY_ISR(UART_ISR)
     {   
         char_rec = UART_ReadRxData();
         if(char_rec == 'b' || char_rec == 'B')
+        {
             flag_uart = 1;
+            LED_Write(1); //internal LED signals that system is sampling and that data are being sent 
+        }
         else if(char_rec == 's' || char_rec == 'S')
+        {
             flag_uart = 0;
+            LED_Write(0); //internal LED signals that system is not sampling anymore 
+        }
     }
 }
 
