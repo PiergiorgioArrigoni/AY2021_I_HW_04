@@ -33,7 +33,7 @@ int main(void)
     {
         if(flag_uart)
         {
-            ISR_ADC_StartEx(ADC_ISR); //ADC samples only if UART "begin" command is received
+            ISR_ADC_StartEx(ADC_ISR); //ADC starts sampling only if UART "begin" command is received
             while(flag_uart){
                 if(flag_packet)
                 {
