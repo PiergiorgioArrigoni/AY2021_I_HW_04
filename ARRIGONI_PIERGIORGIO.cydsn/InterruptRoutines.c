@@ -7,7 +7,7 @@
 #include "InterruptRoutines.h"
 
 #define PHOTO_CHANNEL 0 //only info about one channel is needed as there are 2 channels
-#define PHOTO_THRESH 0.9 //threshold under which led is disabled (set to 20%)
+#define PHOTO_THRESH 0.25 //threshold under which led is disabled (set to 25%)
 
 extern uint8 flag_uart;
 extern uint8 flag_photo;
@@ -39,19 +39,27 @@ CY_ISR(ADC_ISR)
     if(channel == PHOTO_CHANNEL)
     {   
         value_photo = ADC_Read32();
+        /*
+        char string[10];
+        sprintf(string, "%ld\n", value_potentio);
+        UART_PutString(string);
+        */
         if(value_photo < PHOTO_THRESH*65535) 
             flag_photo = 1;
         else
+        {
             flag_photo = 0;
+            PWM_WriteCompare(0);
+        }
     }
-    else
+    else if(flag_photo) //sample potentiometer channel only if photodiode value is under threshold
     {
         value_potentio = ADC_Read32();
         if(value_potentio < 0) 
             value_potentio = 0;
         else if(value_potentio > 65535) 
             value_potentio = 65535;
-        PWM_WriteCompare(value_potentio*255/65535); //ADC is 16bit but PWM is 8bit
+        PWM_WriteCompare(value_potentio*255/65535); //ADC is 16bit but PWM is 8bit          
     }
 }
 /* [] END OF FILE */

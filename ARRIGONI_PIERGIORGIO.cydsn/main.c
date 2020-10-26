@@ -27,13 +27,8 @@ int main(void)
         if(flag_uart)
         {
             ISR_ADC_StartEx(ADC_ISR);
-            while(flag_uart){
-                if(flag_photo)
-                {
-                }
-            }
+            while(flag_uart);
             ISR_ADC_Stop();
-            flag_photo = 0;
         }
         
     }
