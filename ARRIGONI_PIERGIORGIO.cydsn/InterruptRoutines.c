@@ -14,7 +14,6 @@ extern uint8 flag_photo;
 
 uint8 char_rec;
 uint8 channel = 0;
-
 int32 value_photo;
 int32 value_potentio;
 
@@ -40,7 +39,7 @@ CY_ISR(ADC_ISR)
     if(channel == PHOTO_CHANNEL)
     {   
         value_photo = ADC_Read32();
-        if(value_photo > PHOTO_THRESH*65535) 
+        if(value_photo < PHOTO_THRESH*65535) 
             flag_photo = 1;
         else
             flag_photo = 0;
@@ -52,9 +51,7 @@ CY_ISR(ADC_ISR)
             value_potentio = 0;
         else if(value_potentio > 65535) 
             value_potentio = 65535;
-        
-
-        PWM_WriteCompare(value_potentio*255/65535);
+        PWM_WriteCompare(value_potentio*255/65535); //ADC is 16bit but PWM is 8bit
     }
 }
 /* [] END OF FILE */
