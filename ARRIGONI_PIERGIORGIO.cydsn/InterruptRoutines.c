@@ -7,7 +7,7 @@
 #include "InterruptRoutines.h"
 
 #define PHOTO_CHANNEL 0 //only info about one channel is needed as there are 2 channels
-#define PHOTO_THRESH 0.2 //threshold under which led is disabled (set to 20%)
+#define PHOTO_THRESH 0.9 //threshold under which led is disabled (set to 20%)
 
 extern uint8_t flag_uart;
 extern uint8_t flag_photo;
@@ -35,7 +35,7 @@ CY_ISR(ADC_ISR)
     ADC_AMux_Select(channel);
     
     if(channel == PHOTO_CHANNEL)
-    {
+    {   
         value_photo = ADC_Read32();
         if(value_photo > PHOTO_THRESH*65535) 
             flag_photo = 1;
