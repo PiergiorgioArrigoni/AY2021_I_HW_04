@@ -37,7 +37,7 @@
 <wrkspc_dependencies>
 <wrkspc_dependency project="ANCONA_ELENA.cydsn\ANCONA_ELENA.cyprj" dependency="..\..\PSoC Creator\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
 <wrkspc_dependency project="ANDRIOTTO_LUCA.cydsn\ANDRIOTTO_LUCA.cyprj" dependency="..\..\PSoC Creator\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
-<wrkspc_dependency project="ARRIGONI_PIERGIORGIO.cydsn\ARRIGONI_PIERGIORGIO.cyprj" dependency="..\..\PSoC Creator\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
+<wrkspc_dependency project="ARRIGONI_PIERGIORGIO.cydsn\ARRIGONI_PIERGIORGIO.cyprj" dependency="..\..\..\OneDrive - Politecnico di Milano\Universita\Laboratorio Biosensori\Support Material\PSoC\PSoC_AnnotationLibrary\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
 <wrkspc_dependency project="BARLETTA_NUNZIO.cydsn\BARLETTA_NUNZIO.cyprj" dependency="..\..\PSoC Creator\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
 <wrkspc_dependency project="BERNASCONI_SARA.cydsn\BERNASCONI_SARA.cyprj" dependency="..\..\PSoC Creator\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
 <wrkspc_dependency project="BOCCA_GIORGIO.cydsn\BOCCA_GIORGIO.cyprj" dependency="..\..\PSoC Creator\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
