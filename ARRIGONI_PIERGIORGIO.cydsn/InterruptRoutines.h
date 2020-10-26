@@ -1,6 +1,6 @@
 /**
  * \file InterruptRoutine.h
- * \brief Header file for Interrupt Service Routine
+ * \brief Header file for Interrupt Service Routines
  * \author Piergiorgio Arrigoni
 */
 
