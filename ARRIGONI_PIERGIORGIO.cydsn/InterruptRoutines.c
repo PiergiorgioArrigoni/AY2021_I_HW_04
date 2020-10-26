@@ -6,7 +6,7 @@
 
 #include "InterruptRoutines.h"
 
-#define PHOTO_CHANNEL 0 //amux channel of the photodiode
+#define PHOTO_CHANNEL 0 //amux channel of the photoresistor
 #define POTENTIO_CHANNEL 1 //amux channel of the potentiometer
 
 extern uint8 flag_uart; //flag signaling UART instructions for enabling or disabling the sampling
@@ -25,21 +25,21 @@ CY_ISR(UART_ISR)
         if(char_rec == 'b' || char_rec == 'B') //begin
         {
             flag_uart = 1;
-            LED_TX_Write(1); //internal LED turns on: system is sampling and data are continuously being sent 
+            LED_INT_Write(1); //internal LED turns on: system is sampling and data are continuously being sent 
         }
         else if(char_rec == 's' || char_rec == 'S') //stop
         {
             flag_uart = 0;
-            LED_TX_Write(0); //internal LED turns off: system is not sampling anymore 
+            LED_INT_Write(0); //internal LED turns off: system is not sampling anymore 
         }
     }
 }
 
 CY_ISR(ADC_ISR)
 {
-    Timer_ReadStatusRegister(); //bring interrupt line low
+    Timer_ReadStatusRegister(); //brings interrupt line low
     
-    AMux_Select(PHOTO_CHANNEL);
+    AMux_FastSelect(PHOTO_CHANNEL);
     value_photo = ADC_Read32();
     if(value_photo < 0) 
         value_photo = 0;
@@ -49,7 +49,7 @@ CY_ISR(ADC_ISR)
     Data[1] = value_photo >> 8;
     Data[2] = value_photo & 0xFF;
 
-    AMux_Select(POTENTIO_CHANNEL); //potentiometer channel is sampled even if light is over the threshold
+    AMux_FastSelect(POTENTIO_CHANNEL); //potentiometer channel is sampled even if light is over the threshold
     value_potentio = ADC_Read32();
     if(value_potentio < 0) 
         value_potentio = 0;
