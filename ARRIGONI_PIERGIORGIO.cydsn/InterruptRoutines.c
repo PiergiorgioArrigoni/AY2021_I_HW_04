@@ -9,13 +9,14 @@
 #define PHOTO_CHANNEL 0 //only info about one channel is needed as there are 2 channels
 #define PHOTO_THRESH 0.9 //threshold under which led is disabled (set to 20%)
 
-extern uint8_t flag_uart;
-extern uint8_t flag_photo;
+extern uint8 flag_uart;
+extern uint8 flag_photo;
 
-uint8_t char_rec;
-uint8_t channel = 0;
-uint8_t value_photo;
-uint8_t value_potentio;
+uint8 char_rec;
+uint8 channel = 0;
+
+int32 value_photo;
+int32 value_potentio;
 
 CY_ISR(UART_ISR)
 {
@@ -31,8 +32,10 @@ CY_ISR(UART_ISR)
 
 CY_ISR(ADC_ISR)
 {
+    Timer_ReadStatusRegister(); //bring interrupt line low
+    
     channel = 1-channel;
-    ADC_AMux_Select(channel);
+    AMux_Select(channel);
     
     if(channel == PHOTO_CHANNEL)
     {   
@@ -45,6 +48,12 @@ CY_ISR(ADC_ISR)
     else
     {
         value_potentio = ADC_Read32();
+        if(value_potentio < 0) 
+            value_potentio = 0;
+        else if(value_potentio > 65535) 
+            value_potentio = 65535;
+        
+
         PWM_WriteCompare(value_potentio*255/65535);
     }
 }

@@ -16,6 +16,7 @@ int main(void)
     ADC_Start();
     UART_Start();
     PWM_Start();
+    Timer_Start();
     
     //Enable interrupts
     CyGlobalIntEnable;
