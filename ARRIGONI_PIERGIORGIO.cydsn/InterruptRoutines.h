@@ -9,11 +9,11 @@
     
     #include "project.h"
     
-    #define VALUES_TO_SEND 2 //sampled measures to be sent to the bridge control panel
-    #define BUFFER_SIZE 1 + 2*VALUES_TO_SEND + 3 //sampled measures are 16bits long, so number is multiplied by 2 
+    #define VALUES_TO_SEND 2 //sampled signals to be sent to the bridge control panel
+    #define BUFFER_SIZE 1 + 2*VALUES_TO_SEND + 3 //header byte + 2 bytes for each sampled signals + 2 bytes for light threshold value + tail byte
     #define PHOTO_THRESH 0.25 //threshold under which led is disabled (set to 25%)
     
-    CY_ISR_PROTO(UART_ISR); //ISR triggered when one byte is received
+    CY_ISR_PROTO(UART_ISR); //ISR triggered when one byte is received by the UART
     CY_ISR_PROTO(ADC_ISR); //ISR triggered when timer reaches terminal count (needed for timing of ADC sampling)
 #endif
 
