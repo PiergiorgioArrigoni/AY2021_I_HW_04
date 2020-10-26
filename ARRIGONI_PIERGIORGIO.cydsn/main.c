@@ -7,8 +7,10 @@
 #include "project.h"
 #include "InterruptRoutines.h"
 
-uint8_t flag_uart = 1;
-uint8_t flag_photo = 0;
+uint8 flag_uart = 1;
+uint8 flag_photo;
+uint8 flag_packet = 0;
+uint8 Data[BUFFER_SIZE];
 
 int main(void)
 {
@@ -22,15 +24,25 @@ int main(void)
     CyGlobalIntEnable;
     ISR_RX_StartEx(UART_ISR);
     
+    Data[0] = 0xA0;
+    Data[5] = 0xC0;
+    
     for(;;)
     {
         if(flag_uart)
         {
             ISR_ADC_StartEx(ADC_ISR);
-            while(flag_uart);
+            while(flag_uart){
+                if(flag_packet)
+                {
+                    UART_PutArray(Data, 6);
+                    flag_packet = 0;
+                }
+            }
             ISR_ADC_Stop();
-        }
-        
+            flag_photo = 0;
+            PWM_WriteCompare(0);
+        } 
     }
 }
 
