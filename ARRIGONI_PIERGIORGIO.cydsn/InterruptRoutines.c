@@ -9,10 +9,6 @@
 #define PHOTO_CHANNEL 0 //amux channel of the photoresistor
 #define POTENTIO_CHANNEL 1 //amux channel of the potentiometer
 
-extern uint8 flag_uart; //flag signaling UART instructions for enabling or disabling the sampling
-extern uint8 flag_packet; //flag signaling if packet is ready to be sent
-extern uint8 Data[BUFFER_SIZE]; //array of the packet to be sent
-
 uint8 char_rec; //character received from UART
 int32 value_photo; //sampled value from the photoresistor
 int32 value_potentio; //sampled value from the potentiometer
@@ -23,15 +19,9 @@ CY_ISR(UART_ISR)
     {   
         char_rec = UART_ReadRxData();
         if(char_rec == 'b' || char_rec == 'B') //begin
-        {
             flag_uart = 1;
-            LED_INT_Write(1); //internal LED turns on: system is sampling and data are continuously being sent 
-        }
         else if(char_rec == 's' || char_rec == 'S') //stop
-        {
             flag_uart = 0;
-            LED_INT_Write(0); //internal LED turns off: system is not sampling anymore 
-        }
     }
 }
 
@@ -56,10 +46,10 @@ CY_ISR(ADC_ISR)
     else if(value_potentio > 65535) 
         value_potentio = 65535;
     
-    if(value_photo < PHOTO_THRESH*65535)  //if photoresistor value is under threshold we can modulate the LED
+    if(value_photo < PHOTO_THRESH*65535)  //if photoresistor value is under the threshold external LED can be modulated
         PWM_WriteCompare(value_potentio*255/65535); //ADC is 16bit but PWM of the LED is 8bit  
-    else
-        PWM_WriteCompare(0);
+    else 
+        PWM_WriteCompare(0); //if photoresistor value is over the threshold, external LED is turned off
         
     Data[3] = value_potentio >> 8;
     Data[4] = value_potentio & 0xFF;
