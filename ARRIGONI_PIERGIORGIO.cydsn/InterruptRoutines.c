@@ -30,7 +30,7 @@ CY_ISR(ADC_ISR)
     Timer_ReadStatusRegister(); //brings interrupt line low
     
     AMux_FastSelect(PHOTO_CHANNEL);
-    value_photo = ADC_Read32();
+    value_photo = ADC_Read32(); //read32 function is blocking but it's much faster compared to the timer period so there is no problem in putting it in the isr 
     if(value_photo < 0) 
         value_photo = 0;
     else if(value_photo > 65535) 
@@ -38,18 +38,19 @@ CY_ISR(ADC_ISR)
     
     Data[1] = value_photo >> 8;
     Data[2] = value_photo & 0xFF;
-
-    AMux_FastSelect(POTENTIO_CHANNEL); //potentiometer channel is sampled even if light is over the threshold
+    
+    //Potentiometer channel is sampled even if light is over the threshold, so that it can be displayed in bridge control
+    AMux_FastSelect(POTENTIO_CHANNEL); 
     value_potentio = ADC_Read32();
     if(value_potentio < 0) 
         value_potentio = 0;
     else if(value_potentio > 65535) 
         value_potentio = 65535;
     
-    if(value_photo < PHOTO_THRESH*65535)  //if photoresistor value is under the threshold external LED can be modulated
+    if(value_photo < PHOTO_THRESH*65535)  //if photoresistor value is under the threshold the external LED can be modulated
         PWM_WriteCompare(value_potentio*255/65535); //ADC is 16bit but PWM of the LED is 8bit  
     else 
-        PWM_WriteCompare(0); //if photoresistor value is over the threshold, external LED is turned off
+        PWM_WriteCompare(0); //if photoresistor value is over the threshold the external LED is off
         
     Data[3] = value_potentio >> 8;
     Data[4] = value_potentio & 0xFF;

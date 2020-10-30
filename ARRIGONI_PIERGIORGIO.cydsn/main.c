@@ -18,13 +18,13 @@ int main(void)
     CyGlobalIntEnable;
     ISR_RX_StartEx(UART_ISR);
     
-    flag_uart = 1; //system starts with sampling disabled
+    flag_uart = 0; //system starts with sampling disabled
     flag_packet = 0;
     
     Data[0] = 0xA0; //header byte
     Data[BUFFER_SIZE-1] = 0xC0; //tail byte
     
-    uint16 threshold = PHOTO_THRESH*65535; //light threshold to be sent to bridge control to be displayed
+    uint16 threshold = PHOTO_THRESH*65535; //light threshold value to be sent to bridge control to be displayed
     Data[5] = threshold >> 8;
     Data[6] = threshold & 0xFF;
    
@@ -32,9 +32,8 @@ int main(void)
     {
         if(flag_uart)
         {
-            ADC_StartConvert(); //ADC starts sampling when UART "begin" command is received
             LED_INT_Write(1); //internal LED turns on: system is sampling and data are continuously being sent
-            ISR_ADC_StartEx(ADC_ISR); 
+            ISR_ADC_StartEx(ADC_ISR); //ADC starts sampling when UART "begin" command is received
              
             while(flag_uart){
                 if(flag_packet)
@@ -44,8 +43,7 @@ int main(void)
                 }
             }
             
-            ISR_ADC_Stop(); 
-            ADC_StopConvert(); //ADC stops sampling when UART "stop" command is received
+            ISR_ADC_Stop(); //ADC stops sampling when UART "stop" command is received
             LED_INT_Write(0); //internal LED turns off: system is not sampling anymore
             PWM_WriteCompare(0); //UART "stop" command also shuts off external LED
         } 

@@ -10,7 +10,7 @@
     #include "project.h"
     
     #define VALUES_TO_SEND 3 //potentiometer sampling, photoresistor sempling and light threshold (constant)
-    #define BUFFER_SIZE 1 + 2*VALUES_TO_SEND + 1
+    #define BUFFER_SIZE 1 + 2*VALUES_TO_SEND + 1 //header byte + 2 bytes per sent value + tail byte
     #define PHOTO_THRESH 0.25 //threshold under which led is disabled (set to 25% of total range, keeping in mind that the internal LED emanates dim light)
     
     volatile uint8 flag_uart; //flag signaling UART instructions for enabling or disabling the sampling
